@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace NeedleOrganizer.Models
 {
-    public class Needle
+    public class ViewNeedle
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public double Size { get; set; }
-        public int? Length { get; set; }
+        public string Size { get; set; }
+        public string Length { get; set; }
+        public bool HasLength { get; set; }
         public string Manufacturer { get; set; }
         public string Image { get; set; } = "needles.png";
-        public bool IsAvailable { get; set; } = true;
     }
 }

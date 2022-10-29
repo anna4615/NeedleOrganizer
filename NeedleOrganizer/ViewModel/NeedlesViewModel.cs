@@ -20,41 +20,96 @@ namespace NeedleOrganizer.ViewModel
         {
             Title = "Stickor";
             _needleService = needleService;
-            Needles = new ObservableCollection<Needle>();
+            SelectedNeedles = new ObservableCollection<ViewNeedle>();
         }
 
-        public ObservableCollection<Needle> Needles { get; set; }
+        public ObservableCollection<ViewNeedle> SelectedNeedles { get; set; }
+        public List<Needle> NeedlesFromDataStorage { get; set; }
 
         [RelayCommand]
-        async Task GetNeedlesAsync()
+        async Task GetAllNeedlesAsync()
         {
             if (IsBusy)
             {
                 return;
             }
 
-            try
-            {
-                IsBusy = true;
-                List<Needle> needles = await _needleService.GetNeedles();
+            IsBusy = true;
 
-                if (needles.Count != 0)
+            if (NeedlesFromDataStorage == null)
+            {
+                try
                 {
-                    Needles.Clear();
-                    foreach (var needleSet in needles)
-                    {
-                        Needles.Add(needleSet);
-                    }
+                    NeedlesFromDataStorage = await _needleService.GetNeedles();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
+                }
+                finally
+                {
+                    IsBusy = false;
                 }
             }
-            catch (Exception ex)
+
+            PopulateSelectedNeedles(NeedlesFromDataStorage);
+
+            IsBusy = false;
+        }
+
+
+        [RelayCommand]
+        async Task GetCircularNeedlesAsync()
+        {
+            if (IsBusy)
             {
-                Debug.WriteLine(ex);
-                await Shell.Current.DisplayAlert("Error!", $"Unable to get monkeys: {ex.Message}", "OK");
+                return;
             }
-            finally
+
+            IsBusy = true;
+
+            if (NeedlesFromDataStorage == null)
             {
-                IsBusy = false;
+                try
+                {
+                    NeedlesFromDataStorage = await _needleService.GetNeedles();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+
+            PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
+
+            IsBusy = false;
+        }
+
+
+
+        private void PopulateSelectedNeedles(List<Needle> needles)
+        {
+            SelectedNeedles.Clear();
+
+            foreach (var needleSet in needles)
+            {
+                ViewNeedle viewNeedle = new ViewNeedle
+                {
+                    Type = needleSet.Type,
+                    Size = needleSet.Size.ToString() + " mm",
+                    Length = needleSet.Length.ToString() + " cm",
+                    HasLength = needleSet.Length != null,
+                    Manufacturer = needleSet.Manufacturer,
+                    Image = needleSet.Image
+                };
+
+                SelectedNeedles.Add(viewNeedle);
             }
         }
     }

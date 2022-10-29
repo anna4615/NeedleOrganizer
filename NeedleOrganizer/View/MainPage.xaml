@@ -8,13 +8,74 @@
              x:Class="NeedleOrganizer.View.MainPage">
 
 
+    <Grid ColumnDefinitions="*, *"
+          ColumnSpacing="5"
+          RowDefinitions="*, Auto">
 
-    <Button Text="Visa stickor"
-                Command="{Binding GetNeedlesCommand}"
+        <CollectionView BackgroundColor='Transparent'
+                        Grid.ColumnSpan="2"
+                        ItemsSource="{Binding SelectedNeedles}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ViewNeedle">
+                    <Grid Padding="10">
+                        <Frame HeightRequest="125"
+                               Padding="0">
+                            <Grid Padding="0"
+                                  ColumnDefinitions="125, *">
+                                <Image Aspect="AspectFill"
+                                       Source="{Binding Image}"
+                                       WidthRequest="80"
+                                       HeightRequest="80"
+                                       Grid.Column="0"/>
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Padding="1"
+                                                     VerticalOptions="Center">
+                                    <Label>
+                                        <Label.Text Style="{StaticResource LargeLabel}">
+                                            <MultiBinding StringFormat="{}{0}, {1}">
+                                                <Binding Path="Type"/>
+                                                <Binding Path="Manufacturer"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    <Label Text="{Binding Size}"
+                                           Style="{StaticResource SmallLabel}"/>
+                                    <Label IsVisible="{Binding HasLength}"
+                                           Text="{Binding Length}"
+                                           Style="{StaticResource SmallLabel}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="Alla stickor"
+                Style="{StaticResource ButtonOutline}"
+                Command="{Binding GetAllNeedlesCommand}"
                 IsEnabled="{Binding IsNotBusy}"
+                Grid.Column="0"
                 Grid.Row="1"
                 Margin="5"/>
 
+        <Button Text="Rundstickor"
+                Style="{StaticResource ButtonOutline}"
+                Command="{Binding GetCircularNeedlesCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="5"/>
+        
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"
+                           Grid.ColumnSpan="2"
+                           Grid.RowSpan="2"/>
+
+    </Grid>
 
 
 </ContentPage>
