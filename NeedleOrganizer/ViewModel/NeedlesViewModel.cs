@@ -38,28 +38,17 @@ namespace NeedleOrganizer.ViewModel
 
             IsBusy = true;
 
-            //_needleService.DeleteAppDataNeedlesFile();
+            //_needleService.DeleteAppDataNeedlesFile();           
 
             try
             {
                 NeedlesFromDataStorage = await _needleService.GetNeedles();
-                PopulateSelectedNeedles(NeedlesFromDataStorage);
-
-                Needle needle = new Needle
-                {
-                    Id = 8,
-                    Type = "Rundsticka",
-                    Size = 7,
-                    IsAvailable = true,
-                    OnProject = "De här stickorna är led."
-                };
-
-                await _needleService.AddNeedle(needle);
+                PopulateSelectedNeedles(NeedlesFromDataStorage);               
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                await Shell.Current.DisplayAlert("Error!", $"Kunde inte läsa filen: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
             }
             finally
             {
@@ -121,7 +110,7 @@ namespace NeedleOrganizer.ViewModel
             //TODO: collect new needle from app UI, then remove this hardcoaded one
             Needle needle = new Needle
             {
-                Id = 6,
+                //Id = 6,
                 Type = "Rundsticka",
                 Size = 7,
                 IsAvailable = true,

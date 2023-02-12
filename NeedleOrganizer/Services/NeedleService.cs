@@ -1,4 +1,5 @@
-﻿using NeedleOrganizer.Interfaces;
+﻿using Android.App.AppSearch;
+using NeedleOrganizer.Interfaces;
 using NeedleOrganizer.Models;
 using System;
 using System.Collections.Generic;
@@ -11,59 +12,64 @@ namespace NeedleOrganizer.Services
 {
     public class NeedleService : INeedleService
     {
-        string addNeedle = ",\r\n  {\r\n    \"Id\": 5,\r\n    \"Type\": \"Rundsticka\",\r\n    \"Size\": 10,\r\n    \"Length\": 100,\r\n    \"Manufacturer\": \"Drops\",\r\n    \"IsAvailable\": false,\r\n    \"OnProject\": \"Används till fiskartröja.\"\r\n  }";
+        //string addNeedle = ",\r\n  {\r\n    \"Id\": 5,\r\n    \"Type\": \"Rundsticka\",\r\n    \"Size\": 10,\r\n    \"Length\": 100,\r\n    \"Manufacturer\": \"Drops\",\r\n    \"IsAvailable\": false,\r\n    \"OnProject\": \"Används till fiskartröja.\"\r\n  }";
 
-        List<Needle> needles = new List<Needle>();
+        //List<Needle> needles = new List<Needle>();
 
         public async Task<List<Needle>> GetNeedles()
         {
-            if (needles.Count > 0)
-            {
-                return needles;
-            }
+            string dataFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needles.json");
+            string content = "";
 
-            string dataFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needledata.json");
-
-            // open file from AppDataDirectory, throws exception if it doesn't exist
-            try
+            if (File.Exists(dataFile))
             {
                 using Stream readStream = File.OpenRead(dataFile);
                 using StreamReader reader = new StreamReader(readStream);
-                string content = await reader.ReadToEndAsync();
-                needles = JsonSerializer.Deserialize<List<Needle>>(content);
+                content = await reader.ReadToEndAsync();
 
-                return needles;
             }
-            // open file with default needles from AppPAckage and save it to file in AppDataDiractory
-            catch
+            else
             {
-                using Stream readStream = await FileSystem.OpenAppPackageFileAsync("package_needledata.json");
-                using StreamReader reader = new StreamReader(readStream);
-                string content = await reader.ReadToEndAsync();
-                needles = JsonSerializer.Deserialize<List<Needle>>(content);
-                string newContent = JsonSerializer.Serialize(needles);
-                string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needledata.json");
-                using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
-                using StreamWriter writer = new StreamWriter(outputStream);
-                await writer.WriteAsync(newContent);
-
-                return needles;
+                using FileStream outputStream = System.IO.File.Create(dataFile);
             }
+
+            if (string.IsNullOrEmpty(content))
+            {
+                return new List<Needle>();
+            }
+
+            List<Needle> needles = JsonSerializer.Deserialize<List<Needle>>(content);
+            return needles;
         }
 
+
         public async Task AddNeedle(Needle needle)
-        {
-            string dataFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needledata.json");
+        {      
+
+            string dataFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needles.json");
             using Stream readStream = File.OpenRead(dataFile);
             using StreamReader reader = new StreamReader(readStream);
             string content = await reader.ReadToEndAsync();
-            List<Needle> needles = JsonSerializer.Deserialize<List<Needle>>(content);
-            needles.Add(needle);
-            string newContent = JsonSerializer.Serialize(needles);
-
             DeleteAppDataNeedlesFile();
 
-            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needledata.json");
+            List<Needle> needles;
+
+            if (string.IsNullOrEmpty(content))
+            {
+                needles = new List<Needle>();
+                needle.Id = 1;
+                needles.Add(needle);
+            }
+            else
+            {
+                needles = JsonSerializer.Deserialize<List<Needle>>(content);
+                needle.Id = GetNewId(needles);
+                needles.Add(needle);
+            }
+
+            string newContent = JsonSerializer.Serialize(needles);
+
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needles.json");
             using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
             using StreamWriter writer = new StreamWriter(outputStream);
             await writer.WriteAsync(newContent);
@@ -72,8 +78,33 @@ namespace NeedleOrganizer.Services
         public void DeleteAppDataNeedlesFile()
         {
             var path = FileSystem.Current.AppDataDirectory;
-            var targetFile = Path.Combine(path, "needledata.json");
+            var targetFile = Path.Combine(path, "needles.json");
             File.Delete(targetFile);
         }
+
+        private async Task CreateTestNeedles()
+        {
+            using Stream readStream = await FileSystem.OpenAppPackageFileAsync("test_needles.json");
+            using StreamReader reader = new StreamReader(readStream);
+            string content = await reader.ReadToEndAsync();
+            List<Needle> needles = JsonSerializer.Deserialize<List<Needle>>(content);
+            string newContent = JsonSerializer.Serialize(needles);
+            string targetFile = System.IO.Path.Combine(FileSystem.Current.AppDataDirectory, "needles.json");
+            using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
+            using StreamWriter writer = new StreamWriter(outputStream);
+            await writer.WriteAsync(newContent);
+        }
+
+        private int GetNewId(List<Needle> needles)
+        {
+            var lastId = needles
+                .OrderByDescending(n => n.Id)
+                .FirstOrDefault()
+                .Id;
+
+            int newId = lastId + 1;
+            return newId;
+        }
+
     }
 }
