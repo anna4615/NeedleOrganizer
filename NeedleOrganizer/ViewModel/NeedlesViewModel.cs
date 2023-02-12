@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using NeedleOrganizer.Interfaces;
 using NeedleOrganizer.Models;
+using NeedleOrganizer.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +30,7 @@ namespace NeedleOrganizer.ViewModel
         [RelayCommand]
         async Task GetAllNeedlesAsync()
         {
+
             if (IsBusy)
             {
                 return;
@@ -36,26 +38,33 @@ namespace NeedleOrganizer.ViewModel
 
             IsBusy = true;
 
-            if (NeedlesFromDataStorage == null)
+            //_needleService.DeleteAppDataNeedlesFile();
+
+            try
             {
-                try
+                NeedlesFromDataStorage = await _needleService.GetNeedles();
+                PopulateSelectedNeedles(NeedlesFromDataStorage);
+
+                Needle needle = new Needle
                 {
-                    NeedlesFromDataStorage = await _needleService.GetNeedles();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
+                    Id = 8,
+                    Type = "Rundsticka",
+                    Size = 7,
+                    IsAvailable = true,
+                    OnProject = "De här stickorna är led."
+                };
+
+                await _needleService.AddNeedle(needle);
             }
-
-            PopulateSelectedNeedles(NeedlesFromDataStorage);
-
-            IsBusy = false;
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await Shell.Current.DisplayAlert("Error!", $"Kunde inte läsa filen: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
 
@@ -89,6 +98,45 @@ namespace NeedleOrganizer.ViewModel
             PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
 
             IsBusy = false;
+        }
+
+
+        [RelayCommand]
+        async Task GoToDetailsASync(Needle needle)
+        {
+            if (needle == null)
+                return;
+
+            await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
+                new Dictionary<string, object>
+                {
+                    {"Needle", needle }
+                });
+        }
+
+
+        [RelayCommand]
+        async Task AddNeedle()
+        {
+            //TODO: collect new needle from app UI, then remove this hardcoaded one
+            Needle needle = new Needle
+            {
+                Id = 6,
+                Type = "Rundsticka",
+                Size = 7,
+                IsAvailable = true,
+                OnProject = "De här stickorna är lediga."
+            };
+
+            try
+            {
+                await _needleService.AddNeedle(needle);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await Shell.Current.DisplayAlert("Error!", $"Kunde inte lägga till stickor: {ex.Message}", "OK");
+            }
         }
 
 

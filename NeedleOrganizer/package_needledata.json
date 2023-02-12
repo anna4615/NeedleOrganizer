@@ -5,14 +5,17 @@
     "Size": 2.5,
     "Length": 80,
     "Manufacturer": "Drops",
-    "IsAvailable": true
+    "IsAvailable": true,
+    "OnProject": "De här stickorna är lediga."
+
   },
   {
     "Id": 2,
     "Type": "Strumpstickor",
     "Size": 2.5,
     "Manufacturer": "Inox",
-    "IsAvailable": true
+    "IsAvailable": true,
+    "OnProject": "De här stickorna är lediga."
   },
   {
     "Id": 3,
@@ -20,7 +23,8 @@
     "Size": 5,
     "Length": 60,
     "Manufacturer": "Drops",
-    "IsAvailable": true
+    "IsAvailable": true,
+    "OnProject": "De här stickorna är lediga."
   },
   {
     "Id": 4,
@@ -28,6 +32,7 @@
     "Size": 2.25,
     "Length": 80,
     "Manufacturer": "Drops",
-    "IsAvailable": false
+    "IsAvailable": false,
+    "OnProject": "Används till fiskartröja."
   }
 ]

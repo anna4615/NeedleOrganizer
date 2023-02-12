@@ -16,5 +16,8 @@ namespace NeedleOrganizer.Models
         public string Manufacturer { get; set; }
         public string Image { get; set; } = "needles.png";
         public bool IsAvailable { get; set; } = true;
+        public string OnProject { get; set; } = "De här stickorna är lediga.";
+        public string Comment { get; set; } = "Finns ingen kommentar.";
+
     }
 }
