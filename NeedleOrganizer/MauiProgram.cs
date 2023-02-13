@@ -20,11 +20,10 @@ public static class MauiProgram
 
 
 		builder.Services.AddSingleton<INeedleService, NeedleService>();
-
-		builder.Services.AddScoped<NeedlesViewModel>();
-		builder.Services.AddTransient<NeedleDetailsViewModel>();
-
+		builder.Services.AddSingleton<NeedlesViewModel>();
 		builder.Services.AddSingleton<MainPage>();
+
+		builder.Services.AddTransient<NeedleDetailsViewModel>();
 		builder.Services.AddTransient<DetailsPage>();
 
 

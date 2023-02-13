@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace NeedleOrganizer.ViewModel
 {
 
-    [QueryProperty("Needle", "Needle")]
+    [QueryProperty("ViewNeedle", "ViewNeedle")]
     public partial class NeedleDetailsViewModel : BaseViewModel
     {
 
@@ -19,7 +19,7 @@ namespace NeedleOrganizer.ViewModel
         }
 
         [ObservableProperty]
-        Needle needle;
+        ViewNeedle viewNeedle;
 
 
         [RelayCommand]

@@ -8,22 +8,22 @@
              x:Class="NeedleOrganizer.View.MainPage">
 
 
+
     <Grid ColumnDefinitions="*, *"
           ColumnSpacing="5"
           RowDefinitions="*, Auto">
 
         <CollectionView BackgroundColor='Transparent'
-                        Grid.ColumnSpan="2"
-                        ItemsSource="{Binding SelectedNeedles}"
-                        SelectionMode="None">
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding SelectedNeedles}"
+            SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:ViewNeedle">
                     <Grid Padding="10">
-                        <Frame HeightRequest="125"
-                               Padding="0">
+                        <Frame HeightRequest="125" Padding="0">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer CommandParameter="{Binding .}"
-                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NeedlesViewModel}}, Path=GoToDetailsCommand}"/>
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NeedlesViewModel}}, Path=GoToDetailsCommand}"/>
                             </Frame.GestureRecognizers>
                             <Grid Padding="0"
                                   ColumnDefinitions="125, *">
@@ -71,7 +71,7 @@
                 Grid.Column="1"
                 Grid.Row="1"
                 Margin="5"/>
-        
+
         <ActivityIndicator IsVisible="{Binding IsBusy}"
                            IsRunning="{Binding IsBusy}"
                            HorizontalOptions="FillAndExpand"

@@ -38,7 +38,8 @@ namespace NeedleOrganizer.ViewModel
 
             IsBusy = true;
 
-            //_needleService.DeleteAppDataNeedlesFile();           
+           // _needleService.DeleteAppDataNeedlesFile();
+            await Utils.CreateTestNeedles();
 
             try
             {
@@ -91,15 +92,15 @@ namespace NeedleOrganizer.ViewModel
 
 
         [RelayCommand]
-        async Task GoToDetailsASync(Needle needle)
+        async Task GoToDetails(ViewNeedle needle)
         {
-            if (needle == null)
+            if (needle is null)
                 return;
 
             await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
                 new Dictionary<string, object>
                 {
-                    {"Needle", needle }
+                    {"ViewNeedle", needle }
                 });
         }
 
