@@ -27,6 +27,7 @@ namespace NeedleOrganizer.ViewModel
         public ObservableCollection<ViewNeedle> SelectedNeedles { get; set; }
         public List<Needle> NeedlesFromDataStorage { get; set; }
 
+
         [RelayCommand]
         async Task GetAllNeedlesAsync()
         {
@@ -38,8 +39,8 @@ namespace NeedleOrganizer.ViewModel
 
             IsBusy = true;
 
-           // _needleService.DeleteAppDataNeedlesFile();
-            await Utils.CreateTestNeedles();
+            //_needleService.DeleteAppDataNeedlesFile();
+            //await Utils.CreateTestNeedles();
 
             try
             {
@@ -102,6 +103,13 @@ namespace NeedleOrganizer.ViewModel
                 {
                     {"ViewNeedle", needle }
                 });
+        }
+
+
+        [RelayCommand]
+        async Task GoToAdmin()
+        {
+            await Shell.Current.GoToAsync(nameof(AdminPage));
         }
 
 

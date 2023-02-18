@@ -1,5 +1,6 @@
 ﻿using NeedleOrganizer.ViewModel;
 
+
 namespace NeedleOrganizer.View;
 
 public partial class MainPage : ContentPage
