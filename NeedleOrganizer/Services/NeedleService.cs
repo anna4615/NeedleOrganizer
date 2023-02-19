@@ -81,7 +81,6 @@ namespace NeedleOrganizer.Services
             var targetFile = Path.Combine(path, "needles.json");
             File.Delete(targetFile);
         }
-
        
 
         private int GetNewId(List<Needle> needles)

@@ -74,6 +74,7 @@ namespace NeedleOrganizer.ViewModel
                 try
                 {
                     NeedlesFromDataStorage = await _needleService.GetNeedles();
+                    PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
                 }
                 catch (Exception ex)
                 {
@@ -86,7 +87,6 @@ namespace NeedleOrganizer.ViewModel
                 }
             }
 
-            PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
 
             IsBusy = false;
         }

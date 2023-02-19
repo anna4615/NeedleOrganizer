@@ -11,7 +11,7 @@
 
     <Grid ColumnDefinitions="*, *"
           ColumnSpacing="5"
-          RowDefinitions="*, Auto">
+          RowDefinitions="*, Auto, Auto">
 
         <CollectionView BackgroundColor='Transparent'
             Grid.ColumnSpan="2"
@@ -62,7 +62,7 @@
                 IsEnabled="{Binding IsNotBusy}"
                 Grid.Column="0"
                 Grid.Row="1"
-                Margin="5"/>
+                Margin="3"/>
 
         <Button Text="Rundstickor"
                 Style="{StaticResource ButtonOutline}"
@@ -70,14 +70,22 @@
                 IsEnabled="{Binding IsNotBusy}"
                 Grid.Column="1"
                 Grid.Row="1"
-                Margin="5"/>
+                Margin="3"/>
+
+        <Button Text="Admin"
+                Style="{StaticResource ButtonOutline}"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:NeedlesViewModel}}, Path=GoToAdminCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Column="0"
+                Grid.Row="2"
+                Margin="3"/>
 
         <ActivityIndicator IsVisible="{Binding IsBusy}"
                            IsRunning="{Binding IsBusy}"
                            HorizontalOptions="FillAndExpand"
                            VerticalOptions="Center"
-                           Grid.ColumnSpan="2"
-                           Grid.RowSpan="2"/>
+                           Grid.ColumnSpan="3"
+                           Grid.RowSpan="3"/>
 
     </Grid>
 

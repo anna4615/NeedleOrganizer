@@ -10,7 +10,7 @@ namespace NeedleOrganizer
 {
     class Utils
     {       
-        public static async Task CreateTestNeedles()
+        public static async Task CreateDefaultNeedles()
         {
             using Stream readStream = await FileSystem.OpenAppPackageFileAsync("test_needles.json");
             using StreamReader reader = new StreamReader(readStream);
@@ -21,6 +21,14 @@ namespace NeedleOrganizer
             using FileStream outputStream = System.IO.File.OpenWrite(targetFile);
             using StreamWriter writer = new StreamWriter(outputStream);
             await writer.WriteAsync(newContent);
+        }
+
+
+        public static void DeleteNeedlesFile()
+        {
+            var path = FileSystem.Current.AppDataDirectory;
+            var targetFile = Path.Combine(path, "needles.json");
+            File.Delete(targetFile);
         }
     }
 }
