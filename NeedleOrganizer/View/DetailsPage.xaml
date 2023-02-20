@@ -42,7 +42,8 @@
                     </Label.Text>
                 </Label>
                 <Label Text="{Binding ViewNeedle.Size, StringFormat='Diameter: {0}'}"/>
-                <Label Text="{Binding ViewNeedle.Length, StringFormat='Längd: {0}'}"/>
+                <Label Text="{Binding ViewNeedle.Length, StringFormat='Längd: {0}'}"
+                       IsVisible="{Binding ViewNeedle.HasLength}"/>                       
                 <Label Text="{Binding ViewNeedle.OnProject, StringFormat='Status: {0}'}"/>
             </VerticalStackLayout>
             
