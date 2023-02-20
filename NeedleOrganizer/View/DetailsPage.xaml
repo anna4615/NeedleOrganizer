@@ -6,11 +6,46 @@
              x:DataType="viewmodel:NeedleDetailsViewModel"
              Title="{Binding ViewNeedle.Type}">
 
-        <Label Text="{Binding ViewNeedle.Type}"
-           FontSize="25"/>
-    
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="*,Auto,*"
+                  RowDefinitions="160, Auto">
+                <BoxView BackgroundColor="Orange" 
+                           Grid.ColumnSpan="3" 
+                           HeightRequest="160"
+                           HorizontalOptions="FillAndExpand"/>
+                <Frame Grid.RowSpan="2"
+                       Grid.Column="1"
+                       HeightRequest="160"
+                       WidthRequest="160"
+                       CornerRadius="80"
+                       HorizontalOptions="Center"
+                       IsClippedToBounds="True"
+                       Padding="0"
+                       Margin="0,80,0,0">
+                    <Image Aspect="AspectFill"
+                           HeightRequest="160"
+                           WidthRequest="160"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Source="{Binding ViewNeedle.Image}"/>
+                </Frame>
+            </Grid>
 
-
-
-
+            <VerticalStackLayout Padding="10" Spacing="10">
+                <Label FontSize="25">
+                    <Label.Text Style="{StaticResource LargeLabel}">
+                        <MultiBinding StringFormat="{}{0}, {1}">
+                            <Binding Path="ViewNeedle.Type"/>
+                            <Binding Path="ViewNeedle.Manufacturer"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+                <Label Text="{Binding ViewNeedle.Size, StringFormat='Diameter: {0}'}"/>
+                <Label Text="{Binding ViewNeedle.Length, StringFormat='Längd: {0}'}"/>
+                <Label Text="{Binding ViewNeedle.OnProject, StringFormat='Status: {0}'}"/>
+            </VerticalStackLayout>
+            
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -45,7 +45,7 @@ namespace NeedleOrganizer.ViewModel
             try
             {
                 NeedlesFromDataStorage = await _needleService.GetNeedles();
-                PopulateSelectedNeedles(NeedlesFromDataStorage);               
+                PopulateSelectedNeedles(NeedlesFromDataStorage);
             }
             catch (Exception ex)
             {
@@ -69,23 +69,21 @@ namespace NeedleOrganizer.ViewModel
 
             IsBusy = true;
 
-            if (NeedlesFromDataStorage == null)
+            try
             {
-                try
-                {
-                    NeedlesFromDataStorage = await _needleService.GetNeedles();
-                    PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
+                NeedlesFromDataStorage = await _needleService.GetNeedles();
+                PopulateSelectedNeedles(NeedlesFromDataStorage.Where(n => n.Type.ToLower() == "Rundsticka".ToLower()).ToList());
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await Shell.Current.DisplayAlert("Error!", $"Kunde inte hämta stickor: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
 
 
             IsBusy = false;
@@ -152,8 +150,9 @@ namespace NeedleOrganizer.ViewModel
                     Length = needleSet.Length.ToString() + " cm",
                     HasLength = needleSet.Length != null,
                     Manufacturer = needleSet.Manufacturer,
-                    Image = needleSet.Image
-                };
+                    Image = needleSet.Image,
+                    OnProject = needleSet.IsAvailable ? "Lediga" : "Används"
+                };                
 
                 SelectedNeedles.Add(viewNeedle);
             }

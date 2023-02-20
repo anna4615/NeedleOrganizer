@@ -26,8 +26,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<NeedleDetailsViewModel>();
 		builder.Services.AddTransient<DetailsPage>();
 
-		builder.Services.AddTransient<AdminViewModel>();
-		builder.Services.AddTransient<AdminPage>();
+		builder.Services.AddSingleton<AdminViewModel>();
+		builder.Services.AddSingleton<AdminPage>();
 
 
 		return builder.Build();

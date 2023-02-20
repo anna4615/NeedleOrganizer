@@ -15,5 +15,6 @@ namespace NeedleOrganizer.Models
         public bool HasLength { get; set; }
         public string Manufacturer { get; set; }
         public string Image { get; set; } = "needles.png";
+        public string OnProject { get; set; }
     }
 }
