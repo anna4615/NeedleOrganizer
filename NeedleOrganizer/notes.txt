@@ -1,1 +1,7 @@
-﻿If 
+﻿Learn .NET MAUI - Full Course for Beginners
+James Montemagno
+https://www.youtube.com/watch?v=DuNLR_NJv8U
+
+
+Enter data
+https://www.syncfusion.com/blogs/post/designing-effective-data-entry-forms-in-net-maui-a-step-by-step-guide.aspx
